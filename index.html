@@ -480,26 +480,56 @@ const PACKAGES = [
 ];
 const TRAVEL_FEE = 500000;
 
-// Portfolio: Natalia's recent Instagram posts. Add a photo as `img` (data URI) to show it on the tile.
+// Portfolio: Natalia's recent Instagram posts. Each tile shows photos/01.jpg … photos/10.jpg when that file is uploaded next to index.html; until then it shows a colour block.
 const IG = "https://www.instagram.com";
 const PORTFOLIO = [
-  {kind:"photo", label:"Photo",date:"Oct 2026", path:"/nataliadesiandra_mua/p/DeePZe4AXVk/"},
-  {kind:"reel",  label:"Reel",date:"Oct 2026", path:"/nataliadesiandra_mua/reel/Deb2gOHh1-M/"},
-  {kind:"photo", label:"Photo",date:"Oct 2026", path:"/nataliadesiandra_mua/p/DeZPjQ_gWU9/"},
-  {kind:"reel",  label:"Gown look",  date:"Oct 2026", path:"/nataliadesiandra_mua/reel/DeRL6h2BpYY/"},
-  {kind:"reel",  label:"Wedding",    date:"Oct 2026", path:"/nataliadesiandra_mua/reel/DeHQrMQBSTB/"},
-  {kind:"photo", label:"Photo",date:"Oct 2026", path:"/nataliadesiandra_mua/p/DeD5PMegZwa/"},
-  {kind:"reel",  label:"Braids & liner", date:"Sep 2026", path:"/nataliadesiandra_mua/reel/Dd3fTwhBLS4/"},
-  {kind:"photo", label:"Photo",date:"Sep 2026", path:"/nataliadesiandra_mua/p/Dd02gvEgc46/"},
-  {kind:"reel",  label:"Editorial",  date:"Sep 2026", path:"/nataliadesiandra_mua/reel/Ddqt5ddh63q/"},
-  {kind:"reel",  label:"Glowing look", date:"Aug 2026", path:"/nataliadesiandra_mua/reel/DcdDIrCBogn/"}
+  {kind:"photo", label:"Photo",date:"Oct 2026", path:"/nataliadesiandra_mua/p/DeePZe4AXVk/", img:"photos/01.jpg"},
+  {kind:"reel",  label:"Reel",date:"Oct 2026", path:"/nataliadesiandra_mua/reel/Deb2gOHh1-M/", img:"photos/02.jpg"},
+  {kind:"photo", label:"Photo",date:"Oct 2026", path:"/nataliadesiandra_mua/p/DeZPjQ_gWU9/", img:"photos/03.jpg"},
+  {kind:"reel",  label:"Gown look",  date:"Oct 2026", path:"/nataliadesiandra_mua/reel/DeRL6h2BpYY/", img:"photos/04.jpg"},
+  {kind:"reel",  label:"Wedding",    date:"Oct 2026", path:"/nataliadesiandra_mua/reel/DeHQrMQBSTB/", img:"photos/05.jpg"},
+  {kind:"photo", label:"Photo",date:"Oct 2026", path:"/nataliadesiandra_mua/p/DeD5PMegZwa/", img:"photos/06.jpg"},
+  {kind:"reel",  label:"Braids & liner", date:"Sep 2026", path:"/nataliadesiandra_mua/reel/Dd3fTwhBLS4/", img:"photos/07.jpg"},
+  {kind:"photo", label:"Photo",date:"Sep 2026", path:"/nataliadesiandra_mua/p/Dd02gvEgc46/", img:"photos/08.jpg"},
+  {kind:"reel",  label:"Editorial",  date:"Sep 2026", path:"/nataliadesiandra_mua/reel/Ddqt5ddh63q/", img:"photos/09.jpg"},
+  {kind:"reel",  label:"Glowing look", date:"Aug 2026", path:"/nataliadesiandra_mua/reel/DcdDIrCBogn/", img:"photos/10.jpg"}
 ];
 // =====================================================================
 
+// ===== Live Instagram feed (Behold.so) =====
+// Paste Natalia's Behold JSON feed URL here, e.g. "https://feeds.behold.so/AbCdEf123".
+// When set, the portfolio shows her latest Instagram posts automatically (on the live site, not in the Claude preview).
+const BEHOLD_FEED_URL = "https://feeds.behold.so/a1D0DsKsCuF1G7dBJb8x";
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+async function loadInstagramFeed(){
+  if(!BEHOLD_FEED_URL) return;
+  try{
+    const res = await fetch(BEHOLD_FEED_URL);
+    if(!res.ok) return;
+    const data = await res.json();
+    const posts = (data.posts||[]).slice(0,12).map(p=>{
+      const reel = p.mediaType==="VIDEO";
+      const img = p.sizes?.medium?.mediaUrl || p.thumbnailUrl || (reel ? "" : p.mediaUrl);
+      const d = new Date(p.timestamp);
+      return {
+        kind: reel ? "reel" : "photo",
+        label: reel ? "Reel" : (p.mediaType==="CAROUSEL_ALBUM" ? "Album" : "Photo"),
+        date: isNaN(d) ? "" : MONTHS[d.getMonth()]+" "+d.getFullYear(),
+        url: p.permalink, img
+      };
+    }).filter(p=>p.img);
+    if(posts.length){
+      PORTFOLIO.length = 0; PORTFOLIO.push(...posts);
+      const active = document.querySelector('.filters button[aria-pressed="true"]');
+      renderGallery(active ? active.dataset.f : "all");
+    }
+  }catch(e){ /* keep the built-in tiles if the feed can't be reached */ }
+}
+
 function renderGallery(f){
   $("gallery").innerHTML = PORTFOLIO.filter(p=>f==="all"||p.kind===f).map(p=>
-    `<a href="${IG+p.path}" target="_blank" rel="noopener" aria-label="${p.label}, ${p.date}, open on Instagram">
-       ${p.img ? `<img src="${p.img}" alt="${p.label} by Natalia" loading="lazy">` : `<span class="photo"></span>`}
+    `<a href="${p.url || IG+p.path}" target="_blank" rel="noopener" aria-label="${p.label}, ${p.date}, open on Instagram">
+       <span class="photo"></span>${p.img ? `<img src="${p.img}" alt="${p.label} by Natalia" loading="lazy" onerror="this.remove()">` : ""}
        ${p.kind==="reel" ? '<span class="kind" aria-hidden="true">▶</span>' : ""}
        <span class="meta"><b>${p.label}</b><i>${p.date}</i></span>
      </a>`).join("");
@@ -562,6 +592,7 @@ $("fService").value = "wedding";
 estimate();
 
 renderGallery("all");
+loadInstagramFeed();
 
 // reuse the icon for the booking card and the browser-tab / home-screen icon (works when hosted on her own domain)
 const ICON = document.querySelector(".bar .mini img").src;
