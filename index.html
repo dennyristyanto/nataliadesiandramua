@@ -147,6 +147,10 @@ section{padding-block:96px}
 .phone::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:34%;height:18px;border-radius:12px;background:var(--ink);z-index:2}
 .phone .photo{position:absolute;inset:0}
 .phone .play{position:absolute;inset:0;display:grid;place-items:center;z-index:1}
+.phone video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;background:#000}
+.phone .play{border:0;background:transparent;cursor:pointer;z-index:3}
+.phone.playing .play{display:none}
+.phone .sound{position:absolute;right:12px;bottom:14px;z-index:3;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.85);cursor:pointer;font-size:16px}
 .phone .play span{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.85);display:grid;place-items:center;color:#151112;font-size:20px;padding-left:4px}
 .why h2{font-family:var(--f-sans);font-weight:700;font-size:clamp(30px,4vw,44px);letter-spacing:.02em;text-transform:uppercase}
 .why .intro{color:var(--muted);margin-top:10px;margin-bottom:36px}
@@ -326,7 +330,10 @@ footer p{font-size:12px;color:var(--muted)}
 <!-- WHY ME -->
 <section class="why">
   <div class="wrap">
-    <div class="phone"><div class="photo" data-label="Instagram reel"></div><div class="play"><span>▶</span></div></div>
+    <div class="phone" id="phone"><div class="photo" data-label="Instagram reel"></div>
+      <video id="reel" muted loop playsinline preload="metadata" hidden></video>
+      <button type="button" class="play" id="reelBtn" aria-label="Play video"><span>▶</span></button>
+      <button type="button" class="sound" id="soundBtn" aria-label="Turn sound on" hidden>🔇</button></div>
     <div>
       <h2>Why me?</h2>
       <p class="intro">Reasons brides trust Natalia with the day they can only live once:</p>
@@ -507,6 +514,8 @@ async function loadInstagramFeed(){
     const res = await fetch(BEHOLD_FEED_URL);
     if(!res.ok) return;
     const data = await res.json();
+    const newestReel = (data.posts||[]).find(p=>p.mediaType==="VIDEO" && p.mediaUrl);
+    if(newestReel) window.reelFileCheck.then(hasFile=>{ if(!hasFile) setReel(newestReel.mediaUrl, newestReel.thumbnailUrl); });
     const posts = (data.posts||[]).slice(0,12).map(p=>{
       const reel = p.mediaType==="VIDEO";
       const img = p.sizes?.medium?.mediaUrl || p.thumbnailUrl || (reel ? "" : p.mediaUrl);
@@ -592,7 +601,31 @@ $("fService").value = "wedding";
 estimate();
 
 renderGallery("all");
+
+// ===== Phone video in "Why me?" =====
+// 1) If videos/reel.mp4 is uploaded next to index.html, that video plays.
+// 2) Otherwise the newest reel from the Instagram feed plays.
+const REEL_FILE = "videos/reel.mp4";
+const reel = $("reel"), phone = $("phone");
+function setReel(src, poster){
+  if(!src || reel.dataset.set) return;
+  reel.dataset.set = "1";
+  if(poster) reel.poster = poster;
+  reel.src = src; reel.hidden = false;
+  reel.addEventListener("error", ()=>{ reel.hidden = true; delete reel.dataset.set; }, {once:true});
+  const p = reel.play(); if(p) p.then(()=>{ phone.classList.add("playing"); $("soundBtn").hidden=false; }).catch(()=>{});
+}
+window.reelFileCheck = fetch(REEL_FILE, {method:"HEAD"}).then(r=>{ if(r.ok){ setReel(REEL_FILE); return true; } return false; }).catch(()=>false);
 loadInstagramFeed();
+$("reelBtn").addEventListener("click", ()=>{
+  if(reel.hidden){ document.querySelector('.filters button[data-f="reel"]')?.click(); location.hash="portfolio"; return; }
+  reel.play().then(()=>{ phone.classList.add("playing"); $("soundBtn").hidden=false; }).catch(()=>{});
+});
+$("soundBtn").addEventListener("click", ()=>{
+  reel.muted = !reel.muted;
+  $("soundBtn").textContent = reel.muted ? "🔇" : "🔊";
+  $("soundBtn").setAttribute("aria-label", reel.muted ? "Turn sound on" : "Turn sound off");
+});
 
 // reuse the icon for the booking card and the browser-tab / home-screen icon (works when hosted on her own domain)
 const ICON = document.querySelector(".bar .mini img").src;
