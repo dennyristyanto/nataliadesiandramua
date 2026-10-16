@@ -318,6 +318,14 @@ footer .footer-role{margin-top:6px;letter-spacing:.16em;font-size:11px;text-tran
 #bookForm input::placeholder,#bookForm textarea::placeholder{color:var(--ink);opacity:.68}
 #bookForm input,#bookForm select,#bookForm textarea{border-bottom-color:color-mix(in srgb,var(--ink) 24%,transparent)}
 #bookForm input:focus,#bookForm select:focus,#bookForm textarea:focus{border-bottom-color:var(--mocha);background:color-mix(in srgb,var(--bg) 28%,transparent)}
+/* Portfolio reels and refined section typography. */
+.gallery video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.gallery .meta,.gallery .kind{z-index:2}
+.reason h3{line-height:1.25;margin-bottom:2px}
+.reason p{margin-top:0}
+#pk-wedding .stack > .tracked,.pk .who{font-size:14px;font-weight:700;letter-spacing:.18em;line-height:1.5}
+.feature .over .serif{font-size:clamp(48px,6.3vw,76px);font-weight:500}
+.pk h3{font-size:38px;font-weight:500}
 </style>
 </head>
 <body>
@@ -643,9 +651,9 @@ async function loadInstagramFeed(){
         kind: reel ? "reel" : "photo",
         label: reel ? "Reel" : (p.mediaType==="CAROUSEL_ALBUM" ? "Album" : "Photo"),
         date: isNaN(d) ? "" : MONTHS[d.getMonth()]+" "+d.getFullYear(),
-        url: p.permalink, img
+        url: p.permalink, img, video: reel ? p.mediaUrl : ""
       };
-    }).filter(p=>p.img);
+    }).filter(p=>p.img || p.video);
     if(posts.length){
       PORTFOLIO.length = 0; PORTFOLIO.push(...posts);
       const active = document.querySelector('.filters button[aria-pressed="true"]');
@@ -655,7 +663,9 @@ async function loadInstagramFeed(){
 }
 
 const portfolioWide = window.matchMedia("(min-width: 768px)");
+let galleryVideoObserver;
 function renderGallery(f){
+  if(galleryVideoObserver) galleryVideoObserver.disconnect();
   let visiblePosts = PORTFOLIO.filter(p=>f==="all"||p.kind===f);
   if(portfolioWide.matches){
     visiblePosts = visiblePosts.slice(0,7);
@@ -667,9 +677,18 @@ function renderGallery(f){
   $("gallery").innerHTML = visiblePosts.map(p=>
     `<a href="${p.url || IG+p.path}" target="_blank" rel="noopener" aria-label="${p.label}, ${p.date}, open on Instagram">
        <span class="photo"></span>${p.img ? `<img src="${p.img}" alt="${p.label} by Natalia" loading="lazy" onerror="this.remove()">` : ""}
+       ${p.kind==="reel" && p.video ? `<video src="${p.video}" muted autoplay loop playsinline preload="metadata" aria-hidden="true" onerror="this.remove()"></video>` : ""}
        ${p.kind==="reel" ? '<span class="kind" aria-hidden="true">▶</span>' : ""}
        <span class="meta"><b>${p.label}</b><i>${p.date}</i></span>
      </a>`).join("");
+  const videos = [...$("gallery").querySelectorAll("video")];
+  const playMuted = video => { video.muted = true; video.defaultMuted = true; video.play().catch(()=>{}); };
+  if("IntersectionObserver" in window){
+    galleryVideoObserver = new IntersectionObserver(entries => {
+      entries.forEach(({target,isIntersecting}) => isIntersecting ? playMuted(target) : target.pause());
+    }, {threshold:.15});
+    videos.forEach(video => { video.muted = true; galleryVideoObserver.observe(video); });
+  }else{ videos.forEach(playMuted); }
 }
 
 portfolioWide.addEventListener("change",()=>{
