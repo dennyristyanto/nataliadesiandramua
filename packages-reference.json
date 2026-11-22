@@ -1,0 +1,310 @@
+[
+  {
+    "id": "signature",
+    "name": "Signature Wedding Package",
+    "who": "Bride & Groom",
+    "deposit": 2500000,
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Date changes 2 months prior: full charge."
+    ],
+    "variants": [
+      {
+        "id": "signature",
+        "name": "Signature Wedding",
+        "price": 8500000,
+        "incl": [
+          "Makeup & hairdo for Holy Matrimony",
+          "Retouch makeup & hairdo for Reception",
+          "Free trial makeup",
+          "Free accessories (rental only)",
+          "Free softlens",
+          "Free nailart"
+        ],
+        "old": 10500000,
+        "unit": "package",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-2.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "diamond",
+    "name": "Diamond Wedding Package",
+    "who": "Bride & Family",
+    "deposit": 2500000,
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Date changes 2 months prior: full charge."
+    ],
+    "variants": [
+      {
+        "id": "diamond",
+        "name": "Diamond Wedding",
+        "price": 11500000,
+        "incl": [
+          "Makeup & hairdo for Holy Matrimony",
+          "Retouch makeup & hairdo for Reception",
+          "Free trial makeup for bride",
+          "Free accessories (rental only)",
+          "Free softlens",
+          "Free nailart",
+          "Makeup & hairdo for Mom (2 pax)",
+          "Retouch makeup & hairdo for Mom (2 pax)"
+        ],
+        "old": 13000000,
+        "unit": "package",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-1.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "ruby",
+    "name": "Ruby Wedding Package",
+    "who": "Bride & Groom",
+    "deposit": 2500000,
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Date changes 2 months prior: full charge."
+    ],
+    "variants": [
+      {
+        "id": "ruby",
+        "name": "Ruby Wedding",
+        "price": 8500000,
+        "incl": [
+          "Makeup for Holy Matrimony",
+          "Retouch for Reception",
+          "Free trial makeup"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": "Hairdo, accommodation, transportation & meals."
+      }
+    ],
+    "source": "assets/pricelist-3.jpeg",
+    "city": "Out of Yogyakarta"
+  },
+  {
+    "id": "family",
+    "name": "Family Wedding Package",
+    "who": "Mother / Sister / Bridesmaid",
+    "deposit": "50%",
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Full payment is due 2 days before the event."
+    ],
+    "variants": [
+      {
+        "id": "family-retouch",
+        "name": "Holy Matrimony + Reception retouch",
+        "price": 2000000,
+        "incl": [
+          "Makeup & hairdo for Holy Matrimony",
+          "Retouch makeup & hairdo for Reception"
+        ],
+        "old": null,
+        "unit": "person",
+        "exclude": null
+      },
+      {
+        "id": "family-basic",
+        "name": "Holy Matrimony · No retouch",
+        "price": 1300000,
+        "incl": [
+          "Makeup & hairdo for Holy Matrimony",
+          "No retouch"
+        ],
+        "old": null,
+        "unit": "person",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-4.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "engagement",
+    "name": "Engagement Package",
+    "who": "Bride & Groom · Sangjit / Ting Jing ceremony / Tukar Baki / Seserahan",
+    "deposit": "50%",
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Date changes 2 months prior: full charge."
+    ],
+    "variants": [
+      {
+        "id": "engagement-bride",
+        "name": "Bride to be",
+        "price": 3000000,
+        "incl": [
+          "Makeup & hairdo",
+          "Free softlens for bride to be",
+          "Free nailart for bride to be"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      },
+      {
+        "id": "engagement-family",
+        "name": "Mom / Sister",
+        "price": 1200000,
+        "incl": [
+          "Makeup & hairdo"
+        ],
+        "old": null,
+        "unit": "person",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-5.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "indoor",
+    "name": "Indoor Photoshoot",
+    "who": "Maternity / Profile / Presweet",
+    "deposit": "50%",
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Full payment is due 3 days before the event."
+    ],
+    "variants": [
+      {
+        "id": "indoor-basic",
+        "name": "Makeup & hairdo · No retouch",
+        "price": 1200000,
+        "incl": [
+          "Makeup & hairdo",
+          "No retouch"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      },
+      {
+        "id": "indoor-retouch",
+        "name": "Makeup & hairdo + Retouch",
+        "price": 2000000,
+        "incl": [
+          "Makeup & hairdo",
+          "Retouch makeup & hairdo (maximum 3 looks)"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-6.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "outdoor",
+    "name": "Outdoor Photoshoot",
+    "who": "Prewedding",
+    "deposit": "50%",
+    "terms": [
+      "Deposit is non-refundable for any reason."
+    ],
+    "variants": [
+      {
+        "id": "outdoor-basic",
+        "name": "Makeup & hairdo · No retouch",
+        "price": 1200000,
+        "incl": [
+          "Makeup & hairdo",
+          "No retouch"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      },
+      {
+        "id": "outdoor-stylist",
+        "name": "Retouch by hairstylist",
+        "price": 2000000,
+        "incl": [
+          "Makeup & hairdo",
+          "Retouch makeup & hairdo (maximum 3 looks), approximately 10 hours",
+          "Retouch makeup & hairdo handled by hairstylist"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      },
+      {
+        "id": "outdoor-team",
+        "name": "MUA & hairdo team on location",
+        "price": 3000000,
+        "incl": [
+          "Makeup & hairdo",
+          "Retouch makeup & hairdo (maximum 3 looks), approximately 10 hours",
+          "MUA & hairdo team follow the client to the location"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-7.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "regular",
+    "name": "Reguler",
+    "who": "Party / Graduation / Reguler occasion",
+    "deposit": "50%",
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Full payment is due 2 days before the event."
+    ],
+    "variants": [
+      {
+        "id": "regular",
+        "name": "Reguler makeup & hairdo",
+        "price": 1000000,
+        "incl": [
+          "Makeup & hairdo",
+          "Home service: +Rp 100.000 for 1 pax",
+          "Free home service for a minimum of 2 pax"
+        ],
+        "old": null,
+        "unit": "person",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-8.jpeg",
+    "city": "Yogyakarta"
+  },
+  {
+    "id": "sweet17",
+    "name": "Sweet 17",
+    "who": "For the birthday girl",
+    "deposit": 2000000,
+    "terms": [
+      "Deposit is non-refundable for any reason.",
+      "Date changes 2 months prior: full charge."
+    ],
+    "variants": [
+      {
+        "id": "sweet17",
+        "name": "Sweet 17",
+        "price": 1700000,
+        "incl": [
+          "Makeup & hairdo",
+          "Free softlens",
+          "Free nailart"
+        ],
+        "old": null,
+        "unit": "package",
+        "exclude": null
+      }
+    ],
+    "source": "assets/pricelist-9.jpeg",
+    "city": "Yogyakarta"
+  }
+]
